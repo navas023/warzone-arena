@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warzone Arena - Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom colors from the original design */
+        .bg-dark-primary {
+            background-color: #1a1e26;
+        }
+        .bg-dark-secondary {
+            background-color: #21252d;
+        }
+        .bg-dark-tertiary {
+            background-color: #1f2a37;
+        }
+        .text-light-green {
+            color: #89e8ac;
+        }
+
+        /* Gradient for the background body */
+        body {
+            background: linear-gradient(135deg, #1a1e26 0%, #0d0f13 100%);
+        }
+
+        /* Style for the card with a gradient border */
+        .card-container {
+            position: relative;
+            background: rgba(33, 37, 45, 0.6); /* Semi-transparent background */
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+
+        .card-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            padding: 2px; /* Control the thickness of the border */
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        /* Style for the heading text with a gradient fill */
+        .gradient-text {
+            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Input field styles with glow effect on focus */
+        input {
+            color: #e5e7eb;
+            background-color: #1f2a37;
+            border-color: #374151;
+            border-width: 1px;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Fancy button styles */
+        .fancy-button {
+            background: linear-gradient(90deg, #3b82f6, #ec4899);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .fancy-button:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+            transform: translateY(-2px);
+        }
+
+        /* Fade-in animation for the card */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-dark-primary text-gray-300 antialiased flex items-center justify-center min-h-screen">
+
+    <div class="card-container w-full max-w-lg rounded-xl p-10 animate-fadeIn">
+        <h1 class="text-3xl font-bold text-center mb-2 gradient-text">Log In</h1>
+        <p class="text-center text-gray-400 mb-6">Log in to your account.</p>
+
+        <form id="signup-form" class="space-y-6">
+            <!-- Username field, which will also act as the email for authentication -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-400">Username</label>
+                <!-- Placeholder text guides the user to enter an email-like username -->
+                <input type="email" id="username" required placeholder="Enter Username" class="mt-1 block w-full sm:text-sm p-2">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-400">Password</label>
+                <input type="password" id="password" required="" placeholder="••••••••" class="block w-full sm:text-sm p-2">
+                <div class="text-right mt-2">
+                    <a href="#" class="text-sm text-blue-400 font-medium hover:text-blue-300 transition-colors duration-200">Forgot Password?</a>
+                </div>
+            </div>
+            <button type="submit" class="fancy-button w-full text-white font-semibold py-2 rounded-xl shadow-md">
+                Log in
+		
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm">
+            <p class="text-gray-400">Don't have an account yet? <a href="gaming page.html" class="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="messageBox" class="fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-xl shadow-lg transition-all duration-300 opacity-0 transform translate-y-4 z-50">
+        Message
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Global variables provided by the canvas environment
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Get the form and message box elements
+        const signupForm = document.getElementById('signup-form');
+        const messageBox = document.getElementById('messageBox');
+
+        // Handle form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
+
+            // Get the username (which is the email) and the password
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Attempt to create a new user with the username as the email
+                const userCredential = await createUserWithEmailAndPassword(auth, username, password);
+                console.log("User signed up:", userCredential.user);
+                
+                // Show a success message
+                showMessage('Account created successfully!', 'bg-green-600');
+                
+                // Optionally redirect the user or perform other actions
+                // window.location.href = '/tournaments-page';
+
+            } catch (error) {
+                console.error("Error signing up:", error);
+                let errorMessage = "An error occurred. Please try again.";
+                
+                // Customize error messages based on Firebase error codes
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email address is already in use.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'The username is not a valid email address.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'The password is too weak. Please use a stronger password.';
+                }
+                
+                // Show the specific error message to the user
+                showMessage(errorMessage, 'bg-red-600');
+            }
+        });
+
+        // Generic function to show a message box
+        function showMessage(message, colorClass) {
+            messageBox.textContent = message;
+            messageBox.className = `fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-xl shadow-lg transition-all duration-300 transform z-50 ${colorClass} opacity-100 translate-y-0`;
+
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100', 'translate-y-0');
+                messageBox.classList.add('opacity-0', 'translate-y-4');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

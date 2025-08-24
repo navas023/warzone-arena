@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Game Selection</title>
+    <!-- Use the Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0d0f13;
+            /* Applying the subtle gradient for the background */
+            background-image: linear-gradient(135deg, #1a1e26 0%, #0d0f13 100%);
+        }
+        .game-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            /* Add glow effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            /* Frosted glass effect */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(33, 37, 45, 0.4); /* #21252d with transparency */
+            min-width: 300px; /* Ensure cards have a fixed minimum width */
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            /* Enhanced glow effect on hover */
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3), 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+        .gradient-text {
+            /* Applying the gradient to the text */
+            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+        }
+        .btn-gradient {
+            background-image: linear-gradient(45deg, #3b82f6, #ec4899);
+            border: none;
+        }
+        .btn-gradient:hover {
+            background-image: linear-gradient(45deg, #ec4899, #3b82f6);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+        }
+        /* Hide scrollbar for a cleaner look */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col items-center p-6">
+
+    <!-- Main Container -->
+    <div class="container mx-auto max-w-1xl text-center">
+        <!-- Main Heading with gradient text -->
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Select Your Tournament Game</h1>
+        <p class="text-gray-400 mb-12 max-w-2xl mx-auto">
+            Choose the game you wish to participate in. Move your mouse to the left or right side of the cards to scroll.
+        </p>
+
+        <!-- Game Cards Container for Horizontal Scroll -->
+        <div id="game-list" class="flex overflow-x-auto hide-scrollbar pb-8 gap-8">
+
+            <!-- Game Card 1: Valorant -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\valorant.jpeg" alt="Valorant" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">Valorant</h2>
+                    <p class="text-gray-300 text-sm mb-4">A 5v5 character-based tactical shooter where you must plant or defuse the Spike.</p>
+                </div>
+                <button data-game="Valorant" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+
+            <!-- Game Card 2: League of Legends -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\league-of-legends.jpg" alt="League of Legends" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">League of Legends</h2>
+                    <p class="text-gray-300 text-sm mb-4">A fast-paced, competitive multiplayer online battle arena (MOBA) where two teams of five champions battle to destroy the enemy nexus.</p>
+                </div>
+                <button data-game="League of Legends" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+
+            <!-- Game Card 3: Fortnite -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\fortnite.png" alt="Fortnite" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">Fortnite</h2>
+                    <p class="text-gray-300 text-sm mb-4">A popular battle royale game where 100 players are dropped onto an island to be the last one standing.</p>
+                </div>
+                <button data-game="Fortnite" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+
+            <!-- Game Card 4: FIFA -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\fifa.jpeg" alt="FIFA" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">FIFA</h2>
+                    <p class="text-gray-300 text-sm mb-4">An immersive football simulation game featuring teams, players, and leagues from around the world.</p>
+                </div>
+                <button data-game="FIFA" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+            
+            <!-- Game Card 5: Warzone -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\warzone.jpeg" alt="Warzone" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">Call of Duty: Warzone</h2>
+                    <p class="text-gray-300 text-sm mb-4">A free-to-play battle royale video game in which players compete on a shrinking map.</p>
+                </div>
+		<form action="final.html">
+                <button data-game="Warzone" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+		</form>
+            </div>
+            
+            <!-- Game Card 6: Apex Legends -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\apex legends.jpg" alt="Apex Legends" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">Apex Legends</h2>
+                    <p class="text-gray-300 text-sm mb-4">A fast-paced battle royale game where squads of unique Legends with special abilities compete in dynamic arenas to become the last team standing.</p>
+                </div>
+                <button data-game="Apex Legends" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+            
+            <!-- Game Card 7: Rocket League -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\rocket league.jpg" alt="Rocket League" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">Rocket League</h2>
+                    <p class="text-gray-300 text-sm mb-4">A high-octane sports game where players drive rocket-powered cars to score goals in fast-paced, gravity-defying soccer matches.</p>
+                </div>
+                <button data-game="Rocket League" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+            
+            <!-- Game Card 8: CS:GO -->
+            <div class="game-card p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                <img src="C:\Users\muhammednavas.pk\Desktop\bus\cs-go.jpg" alt="CS:GO" class="w-full h-auto rounded-lg mb-4">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold mb-2">CS:GO</h2>
+                    <p class="text-gray-300 text-sm mb-4">A tactical multiplayer first-person shooter where two teams battle in classic bomb defusal or hostage rescue scenarios.</p>
+                </div>
+                <button data-game="CS:GO" class="join-btn btn-gradient text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300">
+                    Join Tournament
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Confirmation Message Box -->
+        <div id="message-box" class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-xl hidden animate-pulse transition-opacity duration-500 z-50">
+            <span id="message-text"></span>
+        </div>
+    </div>
+
+    <script>
+        // Get all the buttons with the class 'join-btn'
+        const joinButtons = document.querySelectorAll('.join-btn');
+        const messageBox = document.getElementById('message-box');
+        const messageText = document.getElementById('message-text');
+
+        // Add a click event listener to each button
+        joinButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Get the game name from the 'data-game' attribute
+                const gameName = button.getAttribute('data-game');
+                
+                // Update the message box text
+                messageText.textContent = `You have selected ${gameName}!`;
+
+                // Show the message box
+                messageBox.classList.remove('hidden');
+
+                // Hide the message box after 3 seconds
+                setTimeout(() => {
+                    messageBox.classList.add('hidden');
+                }, 3000);
+            });
+        });
+
+        // Get the game list container for mouse-based horizontal scrolling
+        const gameList = document.getElementById('game-list');
+        let scrollInterval;
+        const scrollSpeed = 13; // Adjust this value to change scroll speed
+
+        // Clear any existing scroll intervals
+        const stopScroll = () => {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+        };
+
+        // When the mouse is moved over the container
+        gameList.addEventListener('mousemove', (e) => {
+            const containerWidth = gameList.offsetWidth;
+            const mouseX = e.pageX - gameList.offsetLeft;
+
+            const edgeThreshold = 0.15; // 15% of the container width
+            const leftEdge = containerWidth * edgeThreshold;
+            const rightEdge = containerWidth * (1 - edgeThreshold);
+
+            // Check if mouse is in the left or right "hot zones"
+            if (mouseX < leftEdge) {
+                // Scroll left
+                if (!scrollInterval) {
+                    scrollInterval = setInterval(() => {
+                        gameList.scrollLeft -= scrollSpeed;
+                    }, 20); // Adjust this for smoother or faster scrolling
+                }
+            } else if (mouseX > rightEdge) {
+                // Scroll right
+                if (!scrollInterval) {
+                    scrollInterval = setInterval(() => {
+                        gameList.scrollLeft += scrollSpeed;
+                    }, 20);
+                }
+            } else {
+                // Mouse is in the middle, stop scrolling
+                stopScroll();
+            }
+        });
+
+        // Stop scrolling when the mouse leaves the container
+        gameList.addEventListener('mouseleave', stopScroll);
+
+    </script>
+
+</body>
+</html>

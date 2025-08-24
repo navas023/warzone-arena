@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warzone Arena - Private Lobby Tournaments</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style> 
+        /* Custom font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom colors from the original design */
+        .bg-dark-primary {
+            background-color: #1a1e26;
+        }
+        .bg-dark-secondary {
+            background-color: #21252d;
+        }
+        .bg-dark-tertiary {
+            background-color: #1f2a37;
+        }
+        .text-light-green {
+            color: #89e8ac;
+        }
+
+        /* Gradient for the background body */
+        body {
+            background: linear-gradient(135deg, #1a1e26 0%, #0d0f13 100%);
+        }
+
+        /* Style for the card with a gradient border */
+        .card-container {
+            position: relative;
+            background: rgba(33, 37, 45, 0.6); /* Semi-transparent background */
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+
+        .card-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            padding: 2px; /* Control the thickness of the border */
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        /* Style for the heading text with a gradient fill */
+        .gradient-text {
+            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Input field styles with glow effect on focus */
+        input {
+            color: #e5e7eb;
+            background-color: #1f2a37;
+            border-color: #374151;
+            border-width: 1px;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Fancy button styles */
+        .fancy-button {
+            background: linear-gradient(90deg, #3b82f6, #ec4899);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .fancy-button:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+            transform: translateY(-2px);
+        }
+
+        /* Fade-in animation for the card */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* Custom font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom colors from the screenshot for a closer match */
+        .bg-dark-primary {
+            background-color: #1a1e26;
+        }
+        .bg-dark-secondary {
+            background-color: #21252d;
+        }
+        .bg-dark-tertiary {
+            background-color: #1f2a37;
+        }
+        .text-light-green {
+            color: #89e8ac;
+        }
+        /* Subtle light blue highlight for active navigation button */
+        .nav-button-active {
+            background-color: rgba(59, 130, 246, 0.2); /* light blue with transparency */
+            color: #3b82f6; /* Blue text for highlight */
+        }
+        .hover\:bg-blue-600\/20:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+        /* Specific styling for action buttons to retain the strong blue */
+        .bg-dark-blue {
+            background-color: #3b82f6;
+        }
+        /* Style for datetime-local input to match the dark theme */
+        input[type="datetime-local"] {
+            color-scheme: dark; /* Force dark calendar and clock UI */
+        }
+        /* Specific border styling for event cards */
+        .event-card {
+            /* Changed border from transparent to a subtle dark grey for a default border */
+            border: 2px solid #333;
+        }
+        .event-card.selected {
+            border-color: #3b82f6; /* Blue border for selected card */
+        }
+        /* Base styles from the theme description */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0f13; /* New background color */
+            background-image: linear-gradient(135deg, #1a1e26 0%, #0d0f13 100%);
+            background-attachment: fixed;
+            color: #c9d1d9;
+        }
+
+        /* Custom colors from the theme description */
+        .bg-dark-primary {
+            background-color: #0d0f13; /* Use the deepest gray for the body background */
+        }
+        .bg-dark-secondary {
+            background-color: #1a1e26; /* Darker gray for primary containers */
+        }
+        .bg-dark-tertiary {
+            background-color: #21252d; /* Slightly lighter gray for cards/inputs */
+        }
+        .text-light-green {
+            color: #89e8ac;
+        }
+        .text-vibrant-blue {
+            color: #3b82f6;
+        }
+
+        /* New glow effect for headers and key text */
+        .text-gradient {
+            background-image: linear-gradient(45deg, #3b82f6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Navigation buttons and interactive elements */
+        .nav-button-active {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+        .hover\:bg-blue-600\/20:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+        .bg-dark-blue {
+            background-color: #3b82f6;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+        .hover\:bg-blue-600:hover {
+            background-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Card and input styling */
+        .event-card {
+            border: 2px solid #2d3748; /* Subtle border for definition */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            background-color: rgba(26, 30, 38, 0.6); /* Semi-transparent background */
+            transition: all 0.3s ease-in-out;
+        }
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        .event-card.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); /* Blue glow on selected */
+        }
+
+        input[type="datetime-local"] {
+            color-scheme: dark;
+        }
+
+        .bg-dark-tertiary {
+            background-color: #21252d;
+        }
+
+    </style>
+</head>
+<body class="bg-dark-primary text-gray-300 antialiased">
+
+    <div class="min-h-screen flex flex-col p-4">
+
+        <header class="flex items-center justify-between p-4 mb-4 bg-dark-secondary rounded-xl shadow-lg">
+            <div class="flex items-center">
+                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.6c-4.4 0-8-3.6-8-8 0-2.4 1.1-4.6 2.8-6.1l1.2-1.2c.4-.4 1-.4 1.4 0s.4 1 0 1.4L8.4 8.7c-1.3 1.2-2.1 2.9-2.1 4.9 0 3.9 3.1 7 7 7s7-3.1 7-7c0-2 .8-3.7-2.1-4.9l-.7-.6c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l1.2 1.2c1.7 1.5 2.8 3.7 2.8 6.1 0 4.4-3.6 8-8 8zm-4.9-6.9l-1.4 1.4m11.8-1.4l1.4 1.4m-10.4-1.4c-.4.4-1 .4-1.4 0s-.4-1 0-1.4l1.4-1.4c.4-.4 1-.4 1.4 0s.4 1 0 1.4L7.1 14.7zm9.8-1.4l1.4 1.4c.4.4.4 1 0 1.4s-1 .4-1.4 0L14.9 13.3c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l1.4 1.4zm-13.8 0h12.5v-1.4H3.1v1.4zM12 22a10 10 0 100-20 10 10 0 000 20z"></path></svg>
+                <div>
+                    <h1 class="text-xl font-bold text-white">Warzone Arena</h1>
+                    <p class="text-xs text-gray-400">Private Lobby Tournaments</p>
+                </div>
+            </div>
+            <nav class="flex items-center space-x-4">
+                <a id="tournaments-btn" href="#" class="nav-button flex items-center space-x-2 text-sm font-semibold py-2 px-4 rounded-xl transition-colors duration-200 text-gray-400 hover:bg-gray-700/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001 1h4a1 1 0 001-1m-6 0v-2.293a1 1 0 01.293-.707L12 10.586l2.707 2.707a1 1 0 01.293.707V18a1 1 0 01-1 1h-4a1 1 0 01-1-1z"></path></svg>
+                    <span>Tournaments</span>
+                </a>
+                <a id="my-matches-btn" href="#" class="nav-button flex items-center space-x-2 text-sm font-semibold py-2 px-4 rounded-xl transition-colors duration-200 text-gray-400 hover:bg-gray-700/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.104A9 9 0 0112 21a9 9 0 01-8.618-4.104l-2.003-.524a1 1 0 01-.225-1.42l1.6-2.771a1 1 0 011.13-.316l2.138.745a7.978 7.978 0 004.99 0l2.138-.745a1 1 0 011.13.316l1.6 2.77a1 1 0 01-.225 1.42l-2.003.525z"></path></svg>
+                    <span>My Matches</span>
+                </a>
+                <a id="admin-btn" href="#" class="nav-button flex items-center space-x-2 text-sm font-semibold py-2 px-4 rounded-xl text-gray-400 hover:bg-gray-700/20 transition-colors duration-200">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317C10.658 4.103 11.06 4 11.48 4H12a2 2 0 012 2v5h2a2 2 0 012 2v3a2 2 0 01-2 2h-2a2 2 0 01-2-2v-3a2 2 0 01-2-2V6a2 2 0 012-2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22a10 10 0 100-20 10 10 0 000 20z"></path></svg>
+                    <span>Admin</span>
+                </a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 text-sm font-semibold">
+                    <span class="text-white">navis_023</span>
+                    <span class="text-light-green flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        Verified
+                    </span>
+                </div>
+		<form action="log in.html">
+                <button class="bg-dark-blue text-white text-sm font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200">
+                    Logout
+                </button>
+		</form>
+            </div>
+        </header>
+
+        <div class="flex-grow flex space-x-4">
+
+            <aside class="w-1/4 flex-shrink-0 bg-dark-secondary rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 id="events-list-title" class="text-lg font-semibold text-white">Events</h2>
+                    <button id="new-event-btn" class="flex items-center text-sm text-blue-400 font-medium hover:text-blue-300 transition-colors duration-200 hidden">
+                        <span class="text-2xl font-light mr-1">+</span> New Event
+                    </button>
+                </div>
+                <div id="events-list" class="space-y-4"></div>
+            </aside>
+
+            <main class="flex-grow flex flex-col space-y-4">
+
+                <div id="dynamic-content" class="bg-dark-secondary rounded-xl p-6 shadow-lg flex-grow">
+                    </div>
+
+                <div id="reporting-section" class="flex-grow grid grid-cols-2 gap-4">
+                    <div class="bg-dark-secondary rounded-xl p-6 shadow-lg flex flex-col">
+                        <h2 class="text-xl font-semibold text-white mb-4">Match Reporting</h2>
+                        <span class="text-sm text-gray-400">Screenshots optional</span>
+                        <div class="mt-4 space-y-4 flex-grow flex flex-col">
+                            <div>
+                                <label for="kills" class="block text-sm font-medium text-gray-400">Kills</label>
+                                <input type="number" id="kills" class="mt-1 block w-full bg-dark-tertiary rounded-md border-gray-700 shadow-sm sm:text-sm p-2">
+                            </div>
+                            <div>
+                                <label for="placement" class="block text-sm font-medium text-gray-400">Placement</label>
+                                <input type="number" id="placement" class="mt-1 block w-full bg-dark-tertiary rounded-md border-gray-700 shadow-sm sm:text-sm p-2">
+                            </div>
+                            <div class="flex-grow flex flex-col">
+                                <label for="notes" class="block text-sm font-medium text-gray-400 mb-1">Notes</label>
+                                <textarea id="notes" rows="3" class="flex-grow block w-full bg-dark-tertiary rounded-md border-gray-700 shadow-sm sm:text-sm p-2 resize-none" placeholder="Streamer VOD link, disputes, etc."></textarea>
+                            </div>
+                            <button class="w-full bg-green-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-green-700 transition-colors duration-200 mt-4">Submit Report</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-secondary rounded-xl p-6 shadow-lg">
+                        <h2 class="text-xl font-semibold text-white mb-4">Your recent reports</h2>
+                        <div class="bg-dark-tertiary rounded-xl p-4 text-center">
+                            <p class="text-gray-400">No reports yet</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+        <div id="messageBox" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-2 rounded-xl shadow-lg transition-all duration-300 opacity-0 transform translate-y-4 z-50">
+            Lobby code copied to clipboard!
+        </div>
+
+    </div>
+
+    <script>
+        // Data for each event, including a registration state and a specific start time
+        // Added a 'teams' array to simulate registered teams and players
+        let events = [
+            {
+                id: 'event-1',
+                title: 'New Warzone Cup',
+                subtitle: 'Call of Duty: Warzone • 8/18/2025, 5:18:38 PM',
+                startTime: '2025-08-18T17:18:38',
+                checkInAt: '2025-08-18T16:18:38', // Added check-in time
+                teamSize: 'Team Size: 2',
+                maxTeams: 64,
+                registered: 'Registered: 1',
+                status: 'UPCOMING',
+                rules: 'Default rules...',
+                lobbyCode: 'WARZONE-CUP-12345',
+                registrationState: 'unregistered',
+                entryFee: '0',
+                prizePool: '0',
+                manualCheckin: false, // Flag to indicate if check-in has been manually opened
+                teams: [
+                    { name: 'Team Alpha', players: [{ name: 'Nava\'s#1234567', isCheckedIn: false }], isCheckedIn: false },
+                    { name: 'Team Bravo', players: [{ name: 'UserB#8765432', isCheckedIn: false }, { name: 'UserC#9876543', isCheckedIn: false }], isCheckedIn: false }
+                ]
+            },
+            {
+                id: 'event-2',
+                title: 'Warzone Duos - Friday Night Rush',
+                subtitle: '8/18/2025, 3:14:24 PM • Teams 18/64',
+                startTime: '2025-08-18T15:14:24',
+                checkInAt: '2025-08-18T14:14:24', // Added check-in time
+                teamSize: 'Team Size: 2',
+                maxTeams: 64,
+                registered: 'Registered: 18',
+                status: 'UPCOMING',
+                rules: 'Additional rules for duos...',
+                lobbyCode: 'DUOS-FRIDAY-RUSH-XYZ',
+                registrationState: 'unregistered',
+                entryFee: '0',
+                prizePool: '0',
+                manualCheckin: false,
+                teams: [
+                    { name: 'Team Crimson', players: [{ name: 'PlayerX#1111111', isCheckedIn: false }], isCheckedIn: false },
+                    { name: 'Team Delta', players: [{ name: 'PlayerY#2222222', isCheckedIn: false }, { name: 'PlayerZ#3333333', isCheckedIn: false }], isCheckedIn: false }
+                ]
+            },
+            {
+                id: 'event-3',
+                title: 'Solos Sweat Saturday',
+                subtitle: '8/19/2025, 2:14:24 PM • Teams 74/100',
+                startTime: '2025-08-19T14:14:24',
+                checkInAt: '2022-08-19T13:14:24', // Changed to a past date to demonstrate 'open' status
+                teamSize: 'Team Size: 1',
+                maxTeams: 100,
+                registered: 'Registered: 74',
+                status: 'UPCOMING',
+                rules: 'Special rules for solos...',
+                lobbyCode: 'SOLOS-SAT-ABCDEF',
+                registrationState: 'unregistered',
+                entryFee: '0',
+                prizePool: '0',
+                manualCheckin: false,
+                teams: []
+            },
+            {
+                id: 'event-4',
+                title: 'Friday Night Skirmish',
+                subtitle: '8/17/2025, 9:00:00 PM',
+                startTime: '2025-08-17T21:00:00',
+                checkInAt: '2025-08-17T20:00:00', // Added check-in time
+                teamSize: 'Team Size: 4',
+                maxTeams: 32,
+                registered: 'Registered: 32',
+                status: 'COMPLETED',
+                rules: 'Standard quad rules.',
+                lobbyCode: null,
+                registrationState: 'registered',
+                entryFee: '100',
+                prizePool: '3200',
+                manualCheckin: false,
+                teams: []
+            }
+        ];
+
+        let currentEvent = null;
+        let eventTimerIntervalId;
+        let checkinTimerIntervalId;
+        let currentPage = 'tournaments';
+
+        // Helper function to format a number with commas
+        function formatNumberWithCommas(number) {
+            return new Intl.NumberFormat('en-US').format(number);
+        }
+
+        // Function to start the real-time event countdown timer
+        function startCountdown(endTime) {
+            if (eventTimerIntervalId) {
+                clearInterval(eventTimerIntervalId);
+            }
+            const eventTimerElement = document.getElementById('event-timer');
+            const eventStatusElement = document.getElementById('event-status');
+
+            if (!eventTimerElement || !eventStatusElement) return;
+
+            if (currentEvent && currentEvent.status === 'COMPLETED') {
+                eventTimerElement.textContent = 'Event Ended';
+                eventStatusElement.innerHTML = `Status: <span class="text-red-500 font-semibold">COMPLETED</span>`;
+                return;
+            }
+
+            if (currentEvent && currentEvent.status === 'LIVE') {
+                eventTimerElement.textContent = 'Event Started';
+                eventStatusElement.innerHTML = `Status: <span class="text-green-500 font-semibold">LIVE</span>`;
+                return;
+            }
+
+            const eventStart = new Date(endTime).getTime();
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const timeLeft = eventStart - now;
+
+                if (timeLeft <= 0) {
+                    clearInterval(eventTimerIntervalId);
+                    currentEvent.status = 'LIVE';
+                    eventTimerElement.textContent = "Event Started";
+                    eventStatusElement.innerHTML = `Status: <span class="text-green-500 font-semibold">LIVE</span>`;
+                    return;
+                }
+
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                const formattedHours = String(hours).padStart(2, '0');
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+
+                eventTimerElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            }
+
+            updateTimer();
+            eventTimerIntervalId = setInterval(updateTimer, 1000);
+        }
+        
+        // Function to start the real-time check-in countdown timer
+        function startCheckinCountdown(endTime) {
+            if (checkinTimerIntervalId) {
+                clearInterval(checkinTimerIntervalId);
+            }
+            const checkinTimerElement = document.getElementById('checkin-timer');
+            if (!checkinTimerElement) return;
+
+            // New logic: If manual check-in is enabled, show "Check-in Open" and do not start a countdown
+            if (currentEvent.manualCheckin) {
+                checkinTimerElement.textContent = "Check-in Open";
+                return;
+            }
+
+            const checkinTime = new Date(endTime).getTime();
+            
+            function updateTimer() {
+                const now = new Date().getTime();
+                const timeLeft = checkinTime - now;
+
+                if (timeLeft <= 0) {
+                    clearInterval(checkinTimerIntervalId);
+                    checkinTimerElement.textContent = "Check-in Open";
+                    return;
+                }
+
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                const formattedHours = String(hours).padStart(2, '0');
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+                
+                checkinTimerElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            }
+            
+            updateTimer();
+            checkinTimerIntervalId = setInterval(updateTimer, 1000);
+        }
+        
+        // Function to generate and set the new lobby code
+        function generateLobbyCode() {
+            if (!currentEvent) {
+                showMessage('Please select an event first.', 'bg-red-600');
+                return;
+            }
+            const newCode = prompt("Enter the new lobby code:");
+            if (newCode !== null && newCode !== '') {
+                currentEvent.lobbyCode = newCode;
+                updateEventDetails(currentEvent);
+                showMessage('Lobby code updated!', 'bg-green-600');
+            }
+        }
+        
+        // New function to toggle the manual check-in override
+        function toggleCheckinOverride() {
+            if (!currentEvent) {
+                showMessage('Please select an event.', 'bg-red-600');
+                return;
+            }
+
+            const isCurrentlyOpen = currentEvent.manualCheckin;
+            currentEvent.manualCheckin = !isCurrentlyOpen;
+            
+            updateEventDetails(currentEvent);
+            renderEventsList();
+            
+            if (isCurrentlyOpen) {
+                showMessage('Check-in is now closed.', 'bg-red-600');
+            } else {
+                showMessage('Check-in is now open!', 'bg-green-600');
+            }
+        }
+
+        // Function to mark the event as complete
+        function completeEvent() {
+            if (!currentEvent) {
+                showMessage('Please select an event to complete.', 'bg-red-600');
+                return;
+            }
+            currentEvent.status = 'COMPLETED';
+            updateEventDetails(currentEvent);
+            renderEventsList();
+            showMessage('Event marked as completed.', 'bg-green-600');
+        }
+
+        // New function to cancel a completed event
+        function cancelEvent() {
+            if (!currentEvent) {
+                showMessage('No event selected to cancel.', 'bg-red-600');
+                return;
+            }
+            
+            // Revert the status to UPCOMING and the updateEventDetails will correctly
+            // set it to LIVE if the start time has passed.
+            currentEvent.status = 'UPCOMING';
+            currentEvent.manualCheckin = false; // Reset manual checkin
+            updateEventDetails(currentEvent);
+            renderEventsList();
+            showMessage('Event completion cancelled.', 'bg-blue-600');
+        }
+
+        // Function to update the event details on the right side
+        function updateEventDetails(event) {
+            currentEvent = event;
+            
+            if (!event) {
+                clearEventDetails();
+                return;
+            }
+            
+            const now = new Date().getTime();
+            const eventStart = new Date(event.startTime).getTime();
+            if (eventStart <= now && event.status !== 'COMPLETED') {
+                event.status = 'LIVE';
+            }
+
+            let statusText = '';
+            let statusColorClass = '';
+            if (event.status === 'COMPLETED') {
+                statusText = 'COMPLETED';
+                statusColorClass = 'text-red-500';
+            } else if (event.status === 'LIVE') {
+                statusText = 'LIVE';
+                statusColorClass = 'text-green-500';
+            } else { // UPCOMING
+                statusText = 'UPCOMING';
+                statusColorClass = 'text-gray-400';
+            }
+
+            const lobbyCodeDisplay = event.lobbyCode ? event.lobbyCode : '--';
+
+            const eventDetailsHTML = `
+                <div id="event-content" class="h-full flex flex-col">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 id="event-title" class="text-2xl font-bold text-white mb-1">${event.title}</h2>
+                            <p id="event-subtitle" class="text-sm text-gray-400">${event.subtitle}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-dark-tertiary text-gray-300 text-sm px-3 py-1 rounded-full font-medium" id="lobby-code-display">Lobby ${lobbyCodeDisplay}</span>
+                            <span class="bg-dark-tertiary text-gray-300 text-sm px-3 py-1 rounded-full font-medium">MEA</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-6 mt-6">
+                        <div class="flex flex-col">
+                            <span class="text-sm text-gray-400 mb-1">Starts In</span>
+                            <span id="event-timer" class="text-3xl font-bold text-white"></span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm text-gray-400 mb-1">Check-In</span>
+                            <span id="checkin-timer" class="text-3xl font-bold text-white"></span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span id="event-team-size" class="text-sm text-gray-400 mb-1">${event.teamSize}</span>
+                            <span id="event-max-teams" class="text-sm text-gray-400 mb-1">Max Teams: ${event.maxTeams}</span>
+                            <span id="event-status" class="text-sm text-gray-400 mb-1">Status: <span class="${statusColorClass} font-semibold">${statusText}</span></span>
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="flex space-x-3 mt-6">
+                        </div>
+
+                    <div class="mt-6 flex flex-col">
+                        <p class="text-sm text-gray-400 mb-2">Register + Check-In + Event Live to report</p>
+                        <p class="text-sm text-gray-400 font-semibold mb-2">Rules</p>
+                        <div class="bg-dark-tertiary rounded-xl p-4">
+                            <p id="event-rules" class="text-gray-400 italic">${event.rules}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('dynamic-content').innerHTML = eventDetailsHTML;
+            startCountdown(event.startTime);
+            startCheckinCountdown(event.checkInAt);
+
+            const actionButtons = document.getElementById('action-buttons');
+            actionButtons.innerHTML = '';
+            
+            if (currentPage === 'admin') {
+                if (event.status === 'COMPLETED') {
+                    actionButtons.appendChild(createButton('Completed', 'bg-gray-700 text-gray-400 cursor-not-allowed', null));
+                    actionButtons.appendChild(createButton('Cancel', 'border border-gray-600 hover:bg-gray-700/20', () => cancelEvent()));
+                } else {
+                    const checkinButtonText = event.manualCheckin ? 'Close Check-in' : 'Open Check-in';
+                    const checkinButtonColor = event.manualCheckin ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-dark-blue text-white hover:bg-blue-600';
+                    actionButtons.appendChild(createButton(checkinButtonText, checkinButtonColor, () => toggleCheckinOverride()));
+
+                    actionButtons.appendChild(createButton('Start & Share Lobby', 'bg-dark-blue text-white hover:bg-blue-600', null));
+                    actionButtons.appendChild(createButton('Complete', 'bg-red-600 text-white hover:bg-red-700', () => completeEvent()));
+                    actionButtons.appendChild(createButton('Generate New Lobby Code', 'bg-dark-tertiary border border-gray-600 text-white hover:bg-gray-700/20', () => generateLobbyCode()));
+                    // Add "Copy Lobby Code" button if a code exists
+                    if (event.lobbyCode) {
+                        actionButtons.appendChild(createButton('Copy Lobby Code', 'bg-dark-blue text-white hover:bg-blue-600', () => copyToClipboard(event.lobbyCode)));
+                    }
+                }
+            } else {
+                if (event.status === 'COMPLETED') {
+                    actionButtons.appendChild(createButton('Completed', 'bg-gray-700 text-gray-400 cursor-not-allowed', null));
+                } else if (event.status === 'LIVE' && event.registrationState === 'unregistered') {
+                    // New condition: If the event is LIVE and the user is not registered, show a disabled button.
+                    actionButtons.appendChild(createButton('Live', 'bg-gray-700 text-gray-400 cursor-not-allowed', null));
+                } else {
+                    switch (event.registrationState) {
+                        case 'unregistered':
+                            actionButtons.appendChild(createButton('Register', 'bg-dark-blue text-white hover:bg-blue-600', () => {
+                                event.registrationState = 'registered';
+                                const currentReg = parseInt(event.registered.split(': ')[1]);
+                                event.registered = `Registered: ${currentReg + 1}`;
+
+                                // Add the current user to the teams array on registration
+                                const currentUser = "Nava's#1234567"; // Hardcoded for this example
+                                const teamSize = parseInt(event.teamSize.split(': ')[1], 10);
+                                if (teamSize === 1) {
+                                    event.teams.push({ name: currentUser, players: [{ name: currentUser, isCheckedIn: false }], isCheckedIn: false });
+                                } else {
+                                    // For multi-player teams, a more complex logic would be needed.
+                                    // For this example, we'll just add a single-player team.
+                                    event.teams.push({ name: 'Team ' + currentUser, players: [{ name: currentUser, isCheckedIn: false }], isCheckedIn: false });
+                                }
+
+                                updateEventDetails(event);
+                                renderEventsList();
+                            }));
+                            break;
+                        case 'registered':
+                            const now = new Date();
+                            const checkInTime = new Date(event.checkInAt);
+                            
+                            actionButtons.appendChild(createButton('Registered', 'border border-gray-600 cursor-not-allowed opacity-50', null));
+                            
+                            // Updated condition: Check-in is open if time has passed OR if it has been manually opened
+                            if (now >= checkInTime || event.manualCheckin) {
+                                // Check-in is open
+                                actionButtons.appendChild(createButton('Check In', 'border border-gray-600 hover:bg-gray-700/20', () => {
+                                    event.registrationState = 'checked_in';
+                                    // Find the user's team and mark it as checked in
+                                    const currentUser = "Nava's#1234567";
+                                    const team = event.teams.find(t => t.players.some(p => p.name === currentUser));
+                                    if (team) {
+                                        team.isCheckedIn = true;
+                                        team.players.forEach(p => p.isCheckedIn = true);
+                                    }
+                                    updateEventDetails(event);
+                                    renderEventsList();
+                                }));
+                            } else {
+                                // Check-in is not yet open
+                                actionButtons.appendChild(createButton('Check-in Not Open Yet', 'bg-gray-700 text-gray-400 cursor-not-allowed', null));
+                            }
+                            
+                            actionButtons.appendChild(createButton('Leave', 'border border-gray-600 hover:bg-gray-700/20', () => {
+                                // Find the event in the main array and update its state
+                                const eventToLeave = events.find(e => e.id === event.id);
+                                if (eventToLeave) {
+                                    eventToLeave.registrationState = 'unregistered';
+                                    const currentReg = parseInt(eventToLeave.registered.split(': ')[1]);
+                                    eventToLeave.registered = `Registered: ${currentReg - 1}`;
+                                }
+                                // Re-render the events list immediately to reflect the change
+                                renderEventsList();
+                                // Clear the details panel to prevent showing stale data
+                                clearEventDetails();
+                            }));
+                            break;
+                        case 'checked_in':
+                            actionButtons.appendChild(createButton('Checked In', 'border border-gray-600 cursor-not-allowed opacity-50', null));
+                            actionButtons.appendChild(createButton('Leave', 'border border-gray-600 hover:bg-gray-700/20', () => {
+                                const eventToLeave = events.find(e => e.id === event.id);
+                                if (eventToLeave) {
+                                    eventToLeave.registrationState = 'unregistered';
+                                    const currentReg = parseInt(eventToLeave.registered.split(': ')[1]);
+                                    eventToLeave.registered = `Registered: ${currentReg - 1}`;
+                                    // Also uncheck the team
+                                    const currentUser = "Nava's#1234567";
+                                    const team = eventToLeave.teams.find(t => t.players.some(p => p.name === currentUser));
+                                    if (team) {
+                                        team.isCheckedIn = false;
+                                        team.players.forEach(p => p.isCheckedIn = false);
+                                    }
+                                }
+                                renderEventsList();
+                                clearEventDetails();
+                            }));
+                            actionButtons.appendChild(createButton('Copy Lobby Code', 'bg-dark-blue text-white hover:bg-blue-600', () => copyToClipboard(event.lobbyCode)));
+                            break;
+                    }
+                }
+            }
+            
+            // Update the active card styling on the left
+            document.querySelectorAll('.event-card').forEach(card => {
+                card.classList.remove('selected');
+                card.classList.remove('bg-dark-tertiary');
+                card.classList.add('bg-dark-secondary');
+            });
+            const selectedCard = document.getElementById(event.id);
+            if (selectedCard) {
+                selectedCard.classList.remove('bg-dark-secondary');
+                selectedCard.classList.add('selected', 'bg-dark-tertiary');
+            }
+        }
+
+        // Function to render the new event form
+        function renderNewEventForm() {
+            const newEventFormHTML = `
+                <div id="new-event-form" class="p-4">
+                    <h2 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"></path></svg>
+                        Create New Event
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="title" class="block text-sm font-medium text-gray-400">Title</label>
+                                <input type="text" id="title" placeholder="New Warzone Cup" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                            </div>
+                            <div>
+                                <label for="caption" class="block text-sm font-medium text-gray-400">Caption</label>
+                                <input type="text" id="caption" placeholder="Game Name" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="region" class="block text-sm font-medium text-gray-400">Region</label>
+                                    <input type="text" id="region" placeholder="MEA" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="team-size" class="block text-sm font-medium text-gray-400">Team Size</label>
+                                    <input type="number" id="team-size" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="max-teams" class="block text-sm font-medium text-gray-400">Max Teams</label>
+                                    <input type="number" id="max-teams" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="entry-fee" class="block text-sm font-medium text-gray-400">Entry Fee (AED)</label>
+                                    <input type="number" id="entry-fee" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="prize-pool" class="block text-sm font-medium text-gray-400">Prize Pool (AED)</label>
+                                    <input type="number" id="prize-pool" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="starts-at" class="block text-sm font-medium text-gray-400">Starts At</label>
+                                    <input type="datetime-local" id="starts-at" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="check-in-at" class="block text-sm font-medium text-gray-400">Check-in Opens At</label>
+                                <input type="datetime-local" id="check-in-at" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                            </div>
+                            <div>
+                                <label for="rules" class="block text-sm font-medium text-gray-400">Rules</label>
+                                <textarea id="rules" rows="4" placeholder="Default rules..." class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2 resize-y"></textarea>
+                            </div>
+                            <div class="mt-4">
+                                <button id="create-event-btn" class="w-full flex items-center justify-center bg-dark-blue text-white font-semibold py-2 rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                    Create Event
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-sm font-medium text-gray-400">Selected Event Controls</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <button class="w-full bg-dark-tertiary border border-gray-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-gray-700/20 transition-colors duration-200">Open Check-in</button>
+                                <button class="w-full bg-dark-blue text-white font-semibold py-2 rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200">Start & Share Lobby</button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <button class="w-full bg-dark-tertiary border border-gray-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-gray-700/20 transition-colors duration-200">Generate New Lobby Code</button>
+                                <button class="w-full bg-red-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-red-700 transition-colors duration-200">Complete</button>
+                            </div>
+                            <div class="bg-dark-tertiary p-4 rounded-xl">
+                                <h3 class="text-sm font-semibold text-white">Lobby Code: —</h3>
+                                <p class="text-sm text-gray-400">Status: upcoming</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('dynamic-content').innerHTML = newEventFormHTML;
+
+            // Add the event listener for the new event button after it's rendered
+            document.getElementById('create-event-btn').addEventListener('click', () => {
+                // Gather data from the form inputs
+                const title = document.getElementById('title').value;
+                const caption = document.getElementById('caption').value;
+                const region = document.getElementById('region').value || 'MEA';
+                const teamSize = document.getElementById('team-size').value || 0;
+                const maxTeams = parseInt(document.getElementById('max-teams').value, 10);
+                const entryFee = document.getElementById('entry-fee').value;
+                const prizePool = document.getElementById('prize-pool').value;
+                // Get the value from the new datetime-local input
+                const startsAt = document.getElementById('starts-at').value;
+                const checkInAt = document.getElementById('check-in-at').value;
+                const rules = document.getElementById('rules').value || 'Default rules...';
+                
+                // Basic validation
+                if (!title || !startsAt) {
+                    showMessage('Please enter a title and a start time.', 'bg-red-600');
+                    return;
+                }
+
+                // New validation to ensure max teams is a positive number
+                if (isNaN(maxTeams) || maxTeams <= 0) {
+                    showMessage('Please enter a valid number of max teams (greater than 0).', 'bg-red-600');
+                    return;
+                }
+                
+                // Use the provided caption or generate a default subtitle
+                const formattedDate = new Date(startsAt).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+                const formattedTime = new Date(startsAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
+                const subtitle = `${caption || 'Game Name'} • ${formattedDate}, ${formattedTime}`;
+
+                // Create a new event object
+                const newEvent = {
+                    id: 'event-' + Date.now(),
+                    title: title,
+                    subtitle: subtitle,
+                    startTime: startsAt,
+                    checkInAt: checkInAt,
+                    teamSize: `Team Size: ${teamSize}`,
+                    maxTeams: maxTeams,
+                    registered: `Registered: 0`,
+                    status: 'UPCOMING',
+                    rules: rules,
+                    lobbyCode: null, // Lobby code is null until generated by admin
+                    registrationState: 'unregistered',
+                    entryFee: entryFee,
+                    prizePool: prizePool,
+                    manualCheckin: false,
+                    teams: []
+                };
+
+                // Add the new event to the beginning of the events array
+                events.unshift(newEvent);
+
+                // Show a success message
+                showMessage('New event created!', 'bg-green-600');
+
+                // Switch back to the tournaments page to show the new event
+                switchPage('tournaments');
+            });
+        }
+
+        // Function to render the check-in panel for an admin
+        function renderCheckInPanel(event) {
+            const checkInHTML = `
+                <div class="h-full flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-white">Check-in for "${event.title}"</h2>
+                        <button id="back-to-event-btn" class="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors duration-200">
+                            &larr; Back to Event Details
+                        </button>
+                    </div>
+                    <div class="flex-grow space-y-6 overflow-y-auto">
+                        ${event.teams.length > 0 ? event.teams.map(team => `
+                            <div class="bg-dark-tertiary rounded-xl p-4 shadow-md">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-white">${team.name}</h3>
+                                    <span class="text-sm font-medium ${team.isCheckedIn ? 'text-light-green' : 'text-yellow-400'}">
+                                        ${team.isCheckedIn ? 'Checked In' : 'Not Checked In'}
+                                    </span>
+                                </div>
+                                <ul class="list-disc list-inside space-y-1 text-gray-400">
+                                    ${team.players.map(player => `
+                                        <li class="flex items-center justify-between">
+                                            <span>${player.name}</span>
+                                            <button data-team="${team.name}" data-player="${player.name}" class="check-in-btn bg-blue-600 text-white text-xs px-3 py-1 rounded-full hover:bg-blue-700 transition-colors duration-200">
+                                                ${player.isCheckedIn ? 'Undo Check-in' : 'Check In'}
+                                            </button>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `).join('') : '<div class="text-center text-gray-500 py-8">No teams have registered yet.</div>'}
+                    </div>
+                </div>
+            `;
+            document.getElementById('dynamic-content').innerHTML = checkInHTML;
+            document.getElementById('back-to-event-btn').addEventListener('click', () => updateEventDetails(event));
+            
+            // Add click listeners for the individual check-in buttons
+            document.querySelectorAll('.check-in-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const teamName = e.target.getAttribute('data-team');
+                    const playerName = e.target.getAttribute('data-player');
+
+                    const team = event.teams.find(t => t.name === teamName);
+                    if (team) {
+                        const player = team.players.find(p => p.name === playerName);
+                        if (player) {
+                            player.isCheckedIn = !player.isCheckedIn;
+                            // Check if all players in the team are checked in
+                            team.isCheckedIn = team.players.every(p => p.isCheckedIn);
+
+                            // Update the main user's registration state if they are on this team
+                            const currentUser = "Nava's#1234567";
+                            if (player.name === currentUser) {
+                                if (team.isCheckedIn) {
+                                    event.registrationState = 'checked_in';
+                                } else {
+                                    event.registrationState = 'registered';
+                                }
+                            }
+                            
+                            // Re-render the panel and the events list to show the updated status
+                            renderCheckInPanel(event);
+                            renderEventsList();
+                            showMessage(`${playerName} status updated!`, 'bg-green-600');
+                        }
+                    }
+                });
+            });
+        }
+
+
+        // Helper function to create a button with common styling
+        function createButton(text, classes, onClick) {
+            const button = document.createElement('button');
+            button.textContent = text;
+            button.classList.add('px-6', 'py-2', 'rounded-xl', 'text-sm', 'font-semibold', 'transition-colors', 'duration-200', ...classes.split(' '));
+            if (onClick) {
+                button.addEventListener('click', onClick);
+            }
+            return button;
+        }
+
+        // Function to copy text to clipboard and show a message
+        function copyToClipboard(text) {
+            if (!text) return;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showMessage('Lobby code copied to clipboard!', 'bg-blue-600');
+        }
+
+        // Generic function to show a message box
+        function showMessage(message, colorClass) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.textContent = message;
+            messageBox.className = `fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-xl shadow-lg transition-all duration-300 transform z-50 ${colorClass} opacity-100 translate-y-0`;
+
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100', 'translate-y-0');
+                messageBox.classList.add('opacity-0', 'translate-y-4');
+            }, 3000);
+        }
+
+        // Function to render the list of events based on the current page
+        function renderEventsList() {
+            const eventsListContainer = document.getElementById('events-list');
+            const eventsListTitle = document.getElementById('events-list-title');
+            const newEventBtn = document.getElementById('new-event-btn');
+
+            eventsListContainer.innerHTML = '';
+            
+            let eventsToDisplay = [];
+            if (currentPage === 'my-matches') {
+                eventsToDisplay = events.filter(event => event.registrationState !== 'unregistered');
+            } else {
+                eventsToDisplay = events;
+            }
+
+            // Change this line to set the title to "Events" for all pages
+            eventsListTitle.textContent = 'Events';
+
+            if (currentPage === 'admin') {
+                newEventBtn.classList.remove('hidden');
+            } else {
+                newEventBtn.classList.add('hidden');
+            }
+            
+            if (eventsToDisplay.length === 0) {
+                 eventsListContainer.innerHTML = `<div class="text-center text-gray-500 py-8">No events to show.</div>`;
+                 clearEventDetails();
+            } else {
+                eventsToDisplay.forEach(event => {
+                    const card = document.createElement('div');
+                    card.id = event.id;
+                    card.classList.add(
+                        'event-card', 'p-4', 'rounded-xl',
+                        'transition-colors', 'duration-200', 'cursor-pointer',
+                        'bg-dark-secondary', 'hover:bg-dark-tertiary'
+                    );
+
+                    let statusColorClass = 'bg-gray-700/50 text-gray-400';
+                    const now = new Date().getTime();
+                    const eventStart = new Date(event.startTime).getTime();
+                    if (eventStart <= now && event.status !== 'COMPLETED') {
+                        event.status = 'LIVE';
+                    }
+                    if (event.status === 'COMPLETED') {
+                        statusColorClass = 'bg-red-500/10 text-red-400';
+                    } else if (event.status === 'LIVE') {
+                        statusColorClass = 'bg-green-500/10 text-green-400';
+                    }
+
+                    const formattedEntryFee = event.entryFee && event.entryFee !== '0' ? `AED ${formatNumberWithCommas(event.entryFee)}` : 'Free';
+                    const entryFeeDisplay = `${formattedEntryFee} Entry`;
+                    const prizePoolDisplay = `Prize AED ${formatNumberWithCommas(event.prizePool)}`;
+
+
+                    card.innerHTML = `
+                        <h3 class="text-white font-semibold">${event.title}</h3>
+                        <p class="text-xs text-gray-400 my-1">${event.subtitle}</p>
+                        <div class="flex items-center justify-between text-xs mt-2">
+                            <span class="py-1 px-2 rounded-full text-blue-400 bg-blue-500/10 font-medium">${entryFeeDisplay}</span>
+                            <span class="py-1 px-2 rounded-full text-blue-400 bg-blue-500/10 font-medium">${prizePoolDisplay}</span>
+                            <span class="py-1 px-2 rounded-full ${statusColorClass} font-medium">${event.status}</span>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => updateEventDetails(event));
+                    eventsListContainer.appendChild(card);
+                });
+                if (currentEvent === null || !eventsToDisplay.some(event => event.id === currentEvent.id)) {
+                    if (eventsToDisplay.length > 0) {
+                        updateEventDetails(eventsToDisplay[0]);
+                    } else {
+                        clearEventDetails();
+                    }
+                } else {
+                    updateEventDetails(currentEvent);
+                }
+            }
+        }
+
+        // Function to clear event details panel and show a placeholder message
+        function clearEventDetails() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            if (dynamicContent) {
+                dynamicContent.innerHTML = `
+                    <div id="no-events-message" class="text-center h-full flex flex-col justify-center items-center">
+                        <p class="text-gray-400 text-lg">No event selected</p>
+                    </div>
+                `;
+            }
+            currentEvent = null;
+        }
+
+        // Function to switch pages and update active button styling
+        function switchPage(page) {
+            currentPage = page;
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(btn => {
+                btn.classList.remove('nav-button-active', 'text-white');
+                btn.classList.add('text-gray-400', 'hover:bg-gray-700/20');
+            });
+
+            if (page === 'tournaments') {
+                document.getElementById('tournaments-btn').classList.add('nav-button-active');
+                document.getElementById('reporting-section').classList.remove('hidden');
+            } else if (page === 'my-matches') {
+                document.getElementById('my-matches-btn').classList.add('nav-button-active');
+                document.getElementById('reporting-section').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-btn').classList.add('nav-button-active');
+                document.getElementById('reporting-section').classList.add('hidden');
+            }
+            renderEventsList();
+        }
+
+        // Add event listeners to the navigation buttons
+        document.getElementById('tournaments-btn').addEventListener('click', () => {
+            switchPage('tournaments');
+        });
+        document.getElementById('my-matches-btn').addEventListener('click', () => {
+            switchPage('my-matches');
+        });
+        document.getElementById('admin-btn').addEventListener('click', () => {
+            switchPage('admin');
+        });
+        document.getElementById('new-event-btn').addEventListener('click', () => {
+            renderNewEventForm();
+        });
+
+        // Initialize the page with the first event and set the initial page to 'tournaments'
+        window.onload = function() {
+            switchPage('tournaments');
+        }
+    </script>
+</body>
+</html>
