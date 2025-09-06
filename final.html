@@ -8,106 +8,48 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style> 
+    <style>
         /* Custom font family */
         body {
             font-family: 'Inter', sans-serif;
-        }
-
-        /* Custom colors from the original design */
-        .bg-dark-primary {
-            background-color: #1a1e26;
-        }
-        .bg-dark-secondary {
-            background-color: #21252d;
-        }
-        .bg-dark-tertiary {
-            background-color: #1f2a37;
-        }
-        .text-light-green {
-            color: #89e8ac;
-        }
-
-        /* Gradient for the background body */
-        body {
+            /* New: Main background gradient as described */
             background: linear-gradient(135deg, #1a1e26 0%, #0d0f13 100%);
+            min-height: 100vh;
         }
 
-        /* Style for the card with a gradient border */
+        /* The transparent, frosted-glass card effect */
         .card-container {
-            position: relative;
-            background: rgba(33, 37, 45, 0.6); /* Semi-transparent background */
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 1;
+            background-color: rgba(33, 37, 45, 0.5); /* A semi-transparent version of the dark-secondary color */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(10px); /* For Safari support */
+        }
+        
+        /* New: Gradient for buttons and text */
+        .bg-gradient-blue-pink {
+            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            color: white; /* Ensure text is visible on the gradient */
         }
 
-        .card-container::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1rem;
-            padding: 2px; /* Control the thickness of the border */
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            z-index: -1;
+        .bg-gradient-blue-pink-hover:hover {
+             background: linear-gradient(45deg, #4c91ff, #f365ae); /* A slightly lighter version for hover */
         }
 
-        /* Style for the heading text with a gradient fill */
-        .gradient-text {
+        .text-gradient-blue-pink {
             background: linear-gradient(45deg, #3b82f6, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-            -webkit-font-smoothing: antialiased;
+            color: transparent; /* Fallback for browsers that don't support clipping */
         }
 
-        /* Input field styles with glow effect on focus */
-        input {
-            color: #e5e7eb;
-            background-color: #1f2a37;
-            border-color: #374151;
-            border-width: 1px;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease-in-out;
+        /* New: Glow effect for buttons and hover states */
+        .glow-shadow {
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); /* subtle blue glow */
         }
-
-        input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        .glow-shadow-green {
+            box-shadow: 0 0 10px rgba(137, 232, 172, 0.4); /* subtle green glow */
         }
-
-        /* Fancy button styles */
-        .fancy-button {
-            background: linear-gradient(90deg, #3b82f6, #ec4899);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .fancy-button:hover {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
-            transform: translateY(-2px);
-        }
-
-        /* Fade-in animation for the card */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-fadeIn {
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-
-        /* Custom font family */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom colors from the screenshot for a closer match */
+        
+        /* Custom colors from the original screenshot for a closer match */
         .bg-dark-primary {
             background-color: #1a1e26;
         }
@@ -120,118 +62,48 @@
         .text-light-green {
             color: #89e8ac;
         }
+
         /* Subtle light blue highlight for active navigation button */
         .nav-button-active {
             background-color: rgba(59, 130, 246, 0.2); /* light blue with transparency */
             color: #3b82f6; /* Blue text for highlight */
         }
+
         .hover\:bg-blue-600\/20:hover {
             background-color: rgba(59, 130, 246, 0.2);
         }
-        /* Specific styling for action buttons to retain the strong blue */
-        .bg-dark-blue {
-            background-color: #3b82f6;
-        }
+
         /* Style for datetime-local input to match the dark theme */
-        input[type="datetime-local"] {
+        input[type="datetime-local"],
+        input[type="number"],
+        input[type="text"],
+        textarea {
             color-scheme: dark; /* Force dark calendar and clock UI */
+            background-color: #1f2a37;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
         /* Specific border styling for event cards */
         .event-card {
-            /* Changed border from transparent to a subtle dark grey for a default border */
             border: 2px solid #333;
         }
         .event-card.selected {
-            border-color: #3b82f6; /* Blue border for selected card */
-        }
-        /* Base styles from the theme description */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0f13; /* New background color */
-            background-image: linear-gradient(135deg, #1a1e26 0%, #0d0f13 100%);
-            background-attachment: fixed;
-            color: #c9d1d9;
-        }
-
-        /* Custom colors from the theme description */
-        .bg-dark-primary {
-            background-color: #0d0f13; /* Use the deepest gray for the body background */
-        }
-        .bg-dark-secondary {
-            background-color: #1a1e26; /* Darker gray for primary containers */
-        }
-        .bg-dark-tertiary {
-            background-color: #21252d; /* Slightly lighter gray for cards/inputs */
-        }
-        .text-light-green {
-            color: #89e8ac;
-        }
-        .text-vibrant-blue {
-            color: #3b82f6;
-        }
-
-        /* New glow effect for headers and key text */
-        .text-gradient {
-            background-image: linear-gradient(45deg, #3b82f6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Navigation buttons and interactive elements */
-        .nav-button-active {
-            background-color: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.5);
-        }
-        .hover\:bg-blue-600\/20:hover {
-            background-color: rgba(59, 130, 246, 0.2);
-        }
-        .bg-dark-blue {
-            background-color: #3b82f6;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
-        }
-        .hover\:bg-blue-600:hover {
-            background-color: #3b82f6;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-        }
-
-        /* Card and input styling */
-        .event-card {
-            border: 2px solid #2d3748; /* Subtle border for definition */
-            backdrop-filter: blur(10px); /* Frosted glass effect */
-            background-color: rgba(26, 30, 38, 0.6); /* Semi-transparent background */
-            transition: all 0.3s ease-in-out;
-        }
-        .event-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-        .event-card.selected {
             border-color: #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); /* Blue glow on selected */
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+            transform: scale(1.02);
+            transition: all 0.2s ease-in-out;
         }
-
-        input[type="datetime-local"] {
-            color-scheme: dark;
-        }
-
-        .bg-dark-tertiary {
-            background-color: #21252d;
-        }
-
     </style>
 </head>
-<body class="bg-dark-primary text-gray-300 antialiased">
+<body class="text-gray-300 antialiased">
 
     <div class="min-h-screen flex flex-col p-4">
 
-        <header class="flex items-center justify-between p-4 mb-4 bg-dark-secondary rounded-xl shadow-lg">
+        <header class="card-container flex items-center justify-between p-4 mb-4 rounded-xl shadow-lg border border-gray-700/50">
             <div class="flex items-center">
-                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.6c-4.4 0-8-3.6-8-8 0-2.4 1.1-4.6 2.8-6.1l1.2-1.2c.4-.4 1-.4 1.4 0s.4 1 0 1.4L8.4 8.7c-1.3 1.2-2.1 2.9-2.1 4.9 0 3.9 3.1 7 7 7s7-3.1 7-7c0-2 .8-3.7-2.1-4.9l-.7-.6c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l1.2 1.2c1.7 1.5 2.8 3.7 2.8 6.1 0 4.4-3.6 8-8 8zm-4.9-6.9l-1.4 1.4m11.8-1.4l1.4 1.4m-10.4-1.4c-.4.4-1 .4-1.4 0s-.4-1 0-1.4l1.4-1.4c.4-.4 1-.4 1.4 0s.4 1 0 1.4L7.1 14.7zm9.8-1.4l1.4 1.4c.4.4.4 1 0 1.4s-1 .4-1.4 0L14.9 13.3c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l1.4 1.4zm-13.8 0h12.5v-1.4H3.1v1.4zM12 22a10 10 0 100-20 10 10 0 000 20z"></path></svg>
+                <svg class="w-8 h-8 mr-2 text-gradient-blue-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.6c-4.4 0-8-3.6-8-8 0-2.4 1.1-4.6 2.8-6.1l1.2-1.2c.4-.4 1-.4 1.4 0s.4 1 0 1.4L8.4 8.7c-1.3 1.2-2.1 2.9-2.1 4.9 0 3.9 3.1 7 7 7s7-3.1 7-7c0-2 .8-3.7-2.1-4.9l-.7-.6c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l1.2 1.2c1.7 1.5 2.8 3.7 2.8 6.1 0 4.4-3.6 8-8 8zm-4.9-6.9l-1.4 1.4m11.8-1.4l1.4 1.4m-10.4-1.4c-.4.4-1 .4-1.4 0s-.4-1 0-1.4l1.4-1.4c.4-.4 1-.4 1.4 0s.4 1 0 1.4L7.1 14.7zm9.8-1.4l1.4 1.4c.4.4.4 1 0 1.4s-1 .4-1.4 0L14.9 13.3c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l1.4 1.4zm-13.8 0h12.5v-1.4H3.1v1.4zM12 22a10 10 0 100-20 10 10 0 000 20z"></path></svg>
                 <div>
-                    <h1 class="text-xl font-bold text-white">Warzone Arena</h1>
+                    <h1 class="text-xl font-bold text-gradient-blue-pink">Warzone Arena</h1>
                     <p class="text-xs text-gray-400">Private Lobby Tournaments</p>
                 </div>
             </div>
@@ -251,23 +123,24 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <div class="flex items-center space-x-2 text-sm font-semibold">
-                    <span class="text-white">navis_023</span>
+                    <span class="text-white">Nava's#1234567</span>
                     <span class="text-light-green flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                         Verified
                     </span>
                 </div>
-		<form action="index.html">
-                <button class="bg-dark-blue text-white text-sm font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200">
+                <!-- Login button with a new gradient background and hover effect -->
+                <form action="log in.html">
+				<button class="bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white text-sm font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-200 hover:glow-shadow">
                     Logout
                 </button>
-		</form>
+				</form>
             </div>
         </header>
 
         <div class="flex-grow flex space-x-4">
 
-            <aside class="w-1/4 flex-shrink-0 bg-dark-secondary rounded-xl p-4 shadow-lg">
+            <aside class="card-container w-1/4 flex-shrink-0 rounded-xl p-4 shadow-lg border border-gray-700/50">
                 <div class="flex items-center justify-between mb-4">
                     <h2 id="events-list-title" class="text-lg font-semibold text-white">Events</h2>
                     <button id="new-event-btn" class="flex items-center text-sm text-blue-400 font-medium hover:text-blue-300 transition-colors duration-200 hidden">
@@ -279,31 +152,32 @@
 
             <main class="flex-grow flex flex-col space-y-4">
 
-                <div id="dynamic-content" class="bg-dark-secondary rounded-xl p-6 shadow-lg flex-grow">
+                <div id="dynamic-content" class="card-container rounded-xl p-6 shadow-lg flex-grow border border-gray-700/50">
                     </div>
 
                 <div id="reporting-section" class="flex-grow grid grid-cols-2 gap-4">
-                    <div class="bg-dark-secondary rounded-xl p-6 shadow-lg flex flex-col">
+                    <div class="card-container rounded-xl p-6 shadow-lg flex flex-col border border-gray-700/50">
                         <h2 class="text-xl font-semibold text-white mb-4">Match Reporting</h2>
                         <span class="text-sm text-gray-400">Screenshots optional</span>
                         <div class="mt-4 space-y-4 flex-grow flex flex-col">
                             <div>
                                 <label for="kills" class="block text-sm font-medium text-gray-400">Kills</label>
-                                <input type="number" id="kills" class="mt-1 block w-full bg-dark-tertiary rounded-md border-gray-700 shadow-sm sm:text-sm p-2">
+                                <input type="number" id="kills" class="mt-1 block w-full rounded-md border-gray-700 shadow-sm sm:text-sm p-2 bg-dark-tertiary border">
                             </div>
                             <div>
                                 <label for="placement" class="block text-sm font-medium text-gray-400">Placement</label>
-                                <input type="number" id="placement" class="mt-1 block w-full bg-dark-tertiary rounded-md border-gray-700 shadow-sm sm:text-sm p-2">
+                                <input type="number" id="placement" class="mt-1 block w-full rounded-md border-gray-700 shadow-sm sm:text-sm p-2 bg-dark-tertiary border">
                             </div>
                             <div class="flex-grow flex flex-col">
                                 <label for="notes" class="block text-sm font-medium text-gray-400 mb-1">Notes</label>
-                                <textarea id="notes" rows="3" class="flex-grow block w-full bg-dark-tertiary rounded-md border-gray-700 shadow-sm sm:text-sm p-2 resize-none" placeholder="Streamer VOD link, disputes, etc."></textarea>
+                                <textarea id="notes" rows="3" class="flex-grow block w-full rounded-md border-gray-700 shadow-sm sm:text-sm p-2 resize-none bg-dark-tertiary border" placeholder="Streamer VOD link, disputes, etc."></textarea>
                             </div>
-                            <button class="w-full bg-green-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-green-700 transition-colors duration-200 mt-4">Submit Report</button>
+                            <!-- Submit Report button with green gradient/glow -->
+                            <button class="w-full bg-light-green text-gray-900 font-semibold py-2 rounded-xl shadow-md hover:bg-green-400 transition-all duration-200 hover:glow-shadow-green">Submit Report</button>
                         </div>
                     </div>
 
-                    <div class="bg-dark-secondary rounded-xl p-6 shadow-lg">
+                    <div class="card-container rounded-xl p-6 shadow-lg border border-gray-700/50">
                         <h2 class="text-xl font-semibold text-white mb-4">Your recent reports</h2>
                         <div class="bg-dark-tertiary rounded-xl p-4 text-center">
                             <p class="text-gray-400">No reports yet</p>
@@ -327,9 +201,9 @@
             {
                 id: 'event-1',
                 title: 'New Warzone Cup',
-                subtitle: 'Call of Duty: Warzone • 8/18/2025, 5:18:38 PM',
-                startTime: '2025-08-18T17:18:38',
-                checkInAt: '2025-08-18T16:18:38', // Added check-in time
+                subtitle: 'Call of Duty: Warzone • 9/18/2025, 5:18:38 PM',
+                startTime: '2025-09-18T17:18:38',
+                checkInAt: '2025-09-18T16:18:38', // Added check-in time
                 teamSize: 'Team Size: 2',
                 maxTeams: 64,
                 registered: 'Registered: 1',
@@ -379,7 +253,7 @@
                 rules: 'Special rules for solos...',
                 lobbyCode: 'SOLOS-SAT-ABCDEF',
                 registrationState: 'unregistered',
-                entryFee: '0',
+                entryFee: '25', // This will now require payment
                 prizePool: '0',
                 manualCheckin: false,
                 teams: []
@@ -454,11 +328,14 @@
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
+                const day = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
                 const formattedHours = String(hours).padStart(2, '0');
                 const formattedMinutes = String(minutes).padStart(2, '0');
                 const formattedSeconds = String(seconds).padStart(2, '0');
+                const formatteddays = String(day).padStart(2, '0');
 
-                eventTimerElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+                eventTimerElement.textContent = `${formatteddays}d ${formattedHours}h:${formattedMinutes}m:${formattedSeconds}s`;
             }
 
             updateTimer();
@@ -473,7 +350,13 @@
             const checkinTimerElement = document.getElementById('checkin-timer');
             if (!checkinTimerElement) return;
 
-            // New logic: If manual check-in is enabled, show "Check-in Open" and do not start a countdown
+            // NEW LOGIC: If the event is LIVE or COMPLETED, check-in is closed.
+            if (currentEvent.status === 'LIVE' || currentEvent.status === 'COMPLETED') {
+                checkinTimerElement.textContent = "Check-in Closed";
+                return;
+            }
+
+            // OLD LOGIC: If manual check-in is enabled, show "Check-in Open" and do not start a countdown
             if (currentEvent.manualCheckin) {
                 checkinTimerElement.textContent = "Check-in Open";
                 return;
@@ -495,11 +378,14 @@
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
+                const day = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
                 const formattedHours = String(hours).padStart(2, '0');
                 const formattedMinutes = String(minutes).padStart(2, '0');
                 const formattedSeconds = String(seconds).padStart(2, '0');
+                const formatteddays = String(day).padStart(2, '0');
                 
-                checkinTimerElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+                checkinTimerElement.textContent = `${formatteddays}d ${formattedHours}h:${formattedMinutes}m:${formattedSeconds}s`;
             }
             
             updateTimer();
@@ -652,15 +538,15 @@
                     actionButtons.appendChild(createButton('Cancel', 'border border-gray-600 hover:bg-gray-700/20', () => cancelEvent()));
                 } else {
                     const checkinButtonText = event.manualCheckin ? 'Close Check-in' : 'Open Check-in';
-                    const checkinButtonColor = event.manualCheckin ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-dark-blue text-white hover:bg-blue-600';
+                    const checkinButtonColor = event.manualCheckin ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white';
                     actionButtons.appendChild(createButton(checkinButtonText, checkinButtonColor, () => toggleCheckinOverride()));
 
-                    actionButtons.appendChild(createButton('Start & Share Lobby', 'bg-dark-blue text-white hover:bg-blue-600', null));
+                    actionButtons.appendChild(createButton('Start & Share Lobby', 'bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white', null));
                     actionButtons.appendChild(createButton('Complete', 'bg-red-600 text-white hover:bg-red-700', () => completeEvent()));
                     actionButtons.appendChild(createButton('Generate New Lobby Code', 'bg-dark-tertiary border border-gray-600 text-white hover:bg-gray-700/20', () => generateLobbyCode()));
                     // Add "Copy Lobby Code" button if a code exists
                     if (event.lobbyCode) {
-                        actionButtons.appendChild(createButton('Copy Lobby Code', 'bg-dark-blue text-white hover:bg-blue-600', () => copyToClipboard(event.lobbyCode)));
+                        actionButtons.appendChild(createButton('Copy Lobby Code', 'bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white', () => copyToClipboard(event.lobbyCode)));
                     }
                 }
             } else {
@@ -672,8 +558,14 @@
                 } else {
                     switch (event.registrationState) {
                         case 'unregistered':
-                            actionButtons.appendChild(createButton('Register', 'bg-dark-blue text-white hover:bg-blue-600', () => {
-                                event.registrationState = 'registered';
+                            actionButtons.appendChild(createButton('Register', 'bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white', () => {
+                                // Check if entry fee exists and is not '0'
+                                if (event.entryFee && event.entryFee !== '0') {
+                                    event.registrationState = 'registered_unpaid';
+                                } else {
+                                    event.registrationState = 'checked_in'; // Assuming free events are automatically checked in for simplicity
+                                }
+
                                 const currentReg = parseInt(event.registered.split(': ')[1]);
                                 event.registered = `Registered: ${currentReg + 1}`;
 
@@ -692,7 +584,31 @@
                                 renderEventsList();
                             }));
                             break;
-                        case 'registered':
+                        case 'registered_unpaid':
+                            actionButtons.appendChild(createButton('Registered', 'border border-gray-600 cursor-not-allowed opacity-50', null));
+                            actionButtons.appendChild(createButton(`Pay AED ${event.entryFee}`, 'bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white text-sm font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-200 hover:glow-shadow', () => {
+//action:/Payment/payment.html
+                                // Simulate a successful payment
+                                event.registrationState = 'registered_paid';
+                                showMessage('Payment successful! You can now check in.', 'bg-green-600');
+                                updateEventDetails(event);
+                                renderEventsList();
+                            }));
+                            actionButtons.appendChild(createButton('Leave', 'border border-gray-600 hover:bg-gray-700/20', () => {
+                                // Find the event in the main array and update its state
+                                const eventToLeave = events.find(e => e.id === event.id);
+                                if (eventToLeave) {
+                                    eventToLeave.registrationState = 'unregistered';
+                                    const currentReg = parseInt(eventToLeave.registered.split(': ')[1]);
+                                    eventToLeave.registered = `Registered: ${currentReg - 1}`;
+                                }
+                                // Re-render the events list immediately to reflect the change
+                                renderEventsList();
+                                // Clear the details panel to prevent showing stale data
+                                clearEventDetails();
+                            }));
+                            break;
+                        case 'registered_paid':
                             const now = new Date();
                             const checkInTime = new Date(event.checkInAt);
                             
@@ -751,7 +667,7 @@
                                 renderEventsList();
                                 clearEventDetails();
                             }));
-                            actionButtons.appendChild(createButton('Copy Lobby Code', 'bg-dark-blue text-white hover:bg-blue-600', () => copyToClipboard(event.lobbyCode)));
+                            actionButtons.appendChild(createButton('Copy Lobby Code', 'bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white', () => copyToClipboard(event.lobbyCode)));
                             break;
                     }
                 }
@@ -775,59 +691,60 @@
             const newEventFormHTML = `
                 <div id="new-event-form" class="p-4">
                     <h2 class="text-xl font-bold text-white mb-6 flex items-center">
-                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"></path></svg>
+                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                         Create New Event
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-4">
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-400">Title</label>
-                                <input type="text" id="title" placeholder="New Warzone Cup" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                <input type="text" id="title" placeholder="New Warzone Cup" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                             </div>
                             <div>
                                 <label for="caption" class="block text-sm font-medium text-gray-400">Caption</label>
-                                <input type="text" id="caption" placeholder="Game Name" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                <input type="text" id="caption" placeholder="Game Name" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="region" class="block text-sm font-medium text-gray-400">Region</label>
-                                    <input type="text" id="region" placeholder="MEA" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                    <input type="text" id="region" placeholder="MEA" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                                 </div>
                                 <div>
                                     <label for="team-size" class="block text-sm font-medium text-gray-400">Team Size</label>
-                                    <input type="number" id="team-size" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                    <input type="number" id="team-size" placeholder="0" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="max-teams" class="block text-sm font-medium text-gray-400">Max Teams</label>
-                                    <input type="number" id="max-teams" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                    <input type="number" id="max-teams" placeholder="0" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                                 </div>
                                 <div>
                                     <label for="entry-fee" class="block text-sm font-medium text-gray-400">Entry Fee (AED)</label>
-                                    <input type="number" id="entry-fee" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                    <input type="number" id="entry-fee" placeholder="0" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="prize-pool" class="block text-sm font-medium text-gray-400">Prize Pool (AED)</label>
-                                    <input type="number" id="prize-pool" placeholder="0" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                    <input type="number" id="prize-pool" placeholder="0" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                                 </div>
                                 <div>
                                     <label for="starts-at" class="block text-sm font-medium text-gray-400">Starts At</label>
-                                    <input type="datetime-local" id="starts-at" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                    <input type="datetime-local" id="starts-at" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                                 </div>
                             </div>
                             <div>
                                 <label for="check-in-at" class="block text-sm font-medium text-gray-400">Check-in Opens At</label>
-                                <input type="datetime-local" id="check-in-at" class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2">
+                                <input type="datetime-local" id="check-in-at" class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2">
                             </div>
                             <div>
                                 <label for="rules" class="block text-sm font-medium text-gray-400">Rules</label>
-                                <textarea id="rules" rows="4" placeholder="Default rules..." class="mt-1 block w-full bg-dark-tertiary rounded-md shadow-sm sm:text-sm p-2 resize-y"></textarea>
+                                <textarea id="rules" rows="4" placeholder="Default rules..." class="mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2 resize-y"></textarea>
                             </div>
                             <div class="mt-4">
-                                <button id="create-event-btn" class="w-full flex items-center justify-center bg-dark-blue text-white font-semibold py-2 rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200">
+                                <!-- New gradient button for form submission -->
+                                <button id="create-event-btn" class="w-full flex items-center justify-center bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white font-semibold py-2 rounded-xl shadow-md transition-colors duration-200 hover:glow-shadow">
                                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                     Create Event
                                 </button>
@@ -838,7 +755,7 @@
                             <h3 class="text-sm font-medium text-gray-400">Selected Event Controls</h3>
                             <div class="grid grid-cols-2 gap-4">
                                 <button class="w-full bg-dark-tertiary border border-gray-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-gray-700/20 transition-colors duration-200">Open Check-in</button>
-                                <button class="w-full bg-dark-blue text-white font-semibold py-2 rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200">Start & Share Lobby</button>
+                                <button class="w-full bg-gradient-blue-pink bg-gradient-blue-pink-hover text-white font-semibold py-2 rounded-xl shadow-md transition-colors duration-200">Start & Share Lobby</button>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <button class="w-full bg-dark-tertiary border border-gray-600 text-white font-semibold py-2 rounded-xl shadow-md hover:bg-gray-700/20 transition-colors duration-200">Generate New Lobby Code</button>
@@ -940,7 +857,7 @@
                                     ${team.players.map(player => `
                                         <li class="flex items-center justify-between">
                                             <span>${player.name}</span>
-                                            <button data-team="${team.name}" data-player="${player.name}" class="check-in-btn bg-blue-600 text-white text-xs px-3 py-1 rounded-full hover:bg-blue-700 transition-colors duration-200">
+                                            <button data-team="${team.name}" data-player="${player.name}" class="check-in-btn bg-gradient-blue-pink text-white text-xs px-3 py-1 rounded-full hover:bg-blue-700 transition-colors duration-200">
                                                 ${player.isCheckedIn ? 'Undo Check-in' : 'Check In'}
                                             </button>
                                         </li>
@@ -974,7 +891,9 @@
                                 if (team.isCheckedIn) {
                                     event.registrationState = 'checked_in';
                                 } else {
-                                    event.registrationState = 'registered';
+                                    // This logic might need to be more complex if payments were involved
+                                    // For now, let's assume un-checking in a player reverts to the paid state
+                                    event.registrationState = 'registered_paid';
                                 }
                             }
                             
@@ -1059,9 +978,10 @@
                     card.classList.add(
                         'event-card', 'p-4', 'rounded-xl',
                         'transition-colors', 'duration-200', 'cursor-pointer',
-                        'bg-dark-secondary', 'hover:bg-dark-tertiary'
+                        'bg-dark-secondary', 'hover:bg-dark-tertiary',
+                        'transform', 'hover:scale-105'
                     );
-
+                    
                     let statusColorClass = 'bg-gray-700/50 text-gray-400';
                     const now = new Date().getTime();
                     const eventStart = new Date(event.startTime).getTime();
@@ -1159,4 +1079,3 @@
     </script>
 </body>
 </html>
-
